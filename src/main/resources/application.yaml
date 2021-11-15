@@ -1,0 +1,17 @@
+server:
+  port: ${APPLICATION_PORT:8090}
+  shutdown: graceful
+  servlet:
+    contextPath: /ssd
+  compression:
+    enabled: true
+    mime-types: application/json
+    min-response-size: 100000
+
+spring:
+  application:
+    name: saas-service-discovery
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      auto-index-creation: true
