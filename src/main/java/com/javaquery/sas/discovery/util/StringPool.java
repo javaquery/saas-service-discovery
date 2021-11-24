@@ -10,4 +10,5 @@ public class StringPool {
     public static final String TYPE = "type";
     public static final String ENVIRONMENT = "environment";
     public static final String DESTINATION = "destination";
+    public static final String ACTIVE = "active";
 }

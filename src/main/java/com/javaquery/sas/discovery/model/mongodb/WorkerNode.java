@@ -67,4 +67,8 @@ public class WorkerNode {
      * other attributes used for service connection
      */
     private Map<String, Object> attributes;
+    /**
+     * service is active or not
+     */
+    private Boolean active;
 }

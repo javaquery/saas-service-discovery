@@ -18,4 +18,5 @@ public class WorkerNodeFindRequest {
     private String type;
     private String environment;
     private String destination;
+    private Boolean active = true;
 }

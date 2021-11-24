@@ -38,6 +38,7 @@ public class WorkerNodeService {
         Strings.nonNullNonEmpty(request.getType(), () -> query.addCriteria(Criteria.where(StringPool.TYPE).is(request.getType())));
         Strings.nonNullNonEmpty(request.getEnvironment(), () -> query.addCriteria(Criteria.where(StringPool.ENVIRONMENT).is(request.getEnvironment())));
         Strings.nonNullNonEmpty(request.getDestination(), () -> query.addCriteria(Criteria.where(StringPool.DESTINATION).is(request.getDestination())));
+        query.addCriteria(Criteria.where(StringPool.ACTIVE).is(request.getActive()));
         return mongoTemplate.find(query, WorkerNode.class);
     }
 
@@ -54,6 +55,7 @@ public class WorkerNodeService {
         workerNode.setUsername(request.getUsername());
         workerNode.setPassword(request.getPassword());
         workerNode.setAttributes(request.getAttributes());
+        workerNode.setActive(request.getActive());
         try {
             return workerNodeRepository.save(workerNode);
         }catch (DuplicateKeyException e){
@@ -78,6 +80,7 @@ public class WorkerNodeService {
                 workerNode.get().setUsername(request.getUsername());
                 workerNode.get().setPassword(request.getPassword());
                 workerNode.get().setAttributes(request.getAttributes());
+                workerNode.get().setActive(request.getActive());
                 return workerNodeRepository.save(workerNode.get());
             }else{
                 throw new EntityNotFoundException(WorkerNode.class, id);
