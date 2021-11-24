@@ -1,6 +1,5 @@
 package com.javaquery.sas.discovery.model.mongodb;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @Document(collection = "worker-nodes")
-@CompoundIndex(name="unique-worker-node", unique = true, def = "{'identity':1, 'type':1, 'environment':1, 'destination':1}")
+@CompoundIndex(name="unique-worker-node", background = true, unique = true, def = "{'owner':1, 'identity':1, 'type':1, 'environment':1, 'destination':1}")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -24,6 +23,14 @@ import java.util.Map;
 public class WorkerNode {
     @Id
     private String id;
+    /**
+     * When you have multiple teams and product you need to specify the ownership
+     */
+    private String owner;
+    /**
+     * service serving for tier like free, professional, enterprise, etc...
+     */
+    private String tier;
     /**
      * used to store tenantId, userId in case of saas product
      */

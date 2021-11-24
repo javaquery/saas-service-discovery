@@ -12,6 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class WorkerNodeFindRequest {
+    private String owner;
+    private String tier;
     private String identity;
     private String type;
     private String environment;

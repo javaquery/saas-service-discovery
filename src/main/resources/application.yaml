@@ -13,5 +13,5 @@ spring:
     name: saas-service-discovery
   data:
     mongodb:
-      uri: ${MONGODB_URI}
+      uri: ${MONGODB_CONNECTION_STRING}
       auto-index-creation: true

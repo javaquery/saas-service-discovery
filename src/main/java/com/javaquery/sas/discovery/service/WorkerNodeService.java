@@ -5,6 +5,7 @@ import com.javaquery.sas.discovery.controller.rest.request.WorkerNodeFindRequest
 import com.javaquery.sas.discovery.controller.rest.request.WorkerNodeRequest;
 import com.javaquery.sas.discovery.model.mongodb.WorkerNode;
 import com.javaquery.sas.discovery.model.mongodb.repositories.WorkerNodeRepository;
+import com.javaquery.sas.discovery.util.StringPool;
 import com.javaquery.util.string.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -31,16 +32,20 @@ public class WorkerNodeService {
 
     public List<WorkerNode> findWorkerNodes(WorkerNodeFindRequest request) {
         Query query = new Query();
-        Strings.nonNullNonEmpty(request.getIdentity(), () -> query.addCriteria(Criteria.where("identity").is(request.getIdentity())));
-        Strings.nonNullNonEmpty(request.getType(), () -> query.addCriteria(Criteria.where("type").is(request.getType())));
-        Strings.nonNullNonEmpty(request.getEnvironment(), () -> query.addCriteria(Criteria.where("environment").is(request.getEnvironment())));
-        Strings.nonNullNonEmpty(request.getDestination(), () -> query.addCriteria(Criteria.where("destination").is(request.getDestination())));
+        Strings.nonNullNonEmpty(request.getOwner(), () -> query.addCriteria(Criteria.where(StringPool.OWNER).is(request.getOwner())));
+        Strings.nonNullNonEmpty(request.getTier(), () -> query.addCriteria(Criteria.where(StringPool.TIER).is(request.getTier())));
+        Strings.nonNullNonEmpty(request.getIdentity(), () -> query.addCriteria(Criteria.where(StringPool.IDENTITY).is(request.getIdentity())));
+        Strings.nonNullNonEmpty(request.getType(), () -> query.addCriteria(Criteria.where(StringPool.TYPE).is(request.getType())));
+        Strings.nonNullNonEmpty(request.getEnvironment(), () -> query.addCriteria(Criteria.where(StringPool.ENVIRONMENT).is(request.getEnvironment())));
+        Strings.nonNullNonEmpty(request.getDestination(), () -> query.addCriteria(Criteria.where(StringPool.DESTINATION).is(request.getDestination())));
         return mongoTemplate.find(query, WorkerNode.class);
     }
 
     public WorkerNode save(WorkerNodeRequest request) {
         WorkerNode workerNode = new WorkerNode();
         workerNode.setIdentity(request.getIdentity());
+        workerNode.setOwner(request.getOwner());
+        workerNode.setTier(request.getTier());
         workerNode.setType(request.getType());
         workerNode.setEnvironment(request.getEnvironment());
         workerNode.setDestination(request.getDestination());
@@ -62,6 +67,8 @@ public class WorkerNodeService {
         try {
             Optional<WorkerNode> workerNode = workerNodeRepository.findById(id);
             if(workerNode.isPresent()){
+                workerNode.get().setOwner(request.getOwner());
+                workerNode.get().setTier(request.getTier());
                 workerNode.get().setIdentity(request.getIdentity());
                 workerNode.get().setType(request.getType());
                 workerNode.get().setEnvironment(request.getEnvironment());
@@ -83,10 +90,13 @@ public class WorkerNodeService {
     public WorkerNode delete(String id) {
         Optional<WorkerNode> workerNode = workerNodeRepository.findById(id);
         try{
-            workerNodeRepository.deleteById(id);
+            if(workerNode.isPresent()){
+                workerNodeRepository.deleteById(id);
+                return workerNode.get();
+            }
         }catch (Exception e){
             throw new RuntimeException(e);
         }
-        return workerNode.get();
+        return new WorkerNode();
     }
 }

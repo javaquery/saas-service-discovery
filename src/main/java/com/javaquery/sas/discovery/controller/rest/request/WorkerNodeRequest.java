@@ -16,6 +16,16 @@ import java.util.Map;
 @Setter
 public class WorkerNodeRequest {
     /**
+     * When you have multiple teams and product you need to specify the ownership
+     */
+    @NotBlank
+    private String owner;
+    /**
+     * service serving for tier like free, professional, enterprise, etc...
+     */
+    @NotBlank
+    private String tier;
+    /**
      * used to store tenantId, userId in case of saas product
      */
     @NotBlank

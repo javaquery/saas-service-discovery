@@ -17,7 +17,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping("/worker-node")
+@RequestMapping("/worker-nodes")
 @Validated
 public class WorkerNodeController {
 
@@ -29,7 +29,7 @@ public class WorkerNodeController {
         return CommonResponse.of(workerNodeService.findAllWorkerNodes());
     }
 
-    @GetMapping("/find")
+    @PostMapping("/find")
     public CommonResponse<List<WorkerNode>> findWorkerNodes(@RequestBody WorkerNodeFindRequest request){
         return CommonResponse.of(workerNodeService.findWorkerNodes(request));
     }
